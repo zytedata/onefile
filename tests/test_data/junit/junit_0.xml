@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="187.111" timestamp="2024-01-07T18:41:28.776987" hostname="localhost"><testcase classname="long.way.to.test_puppet.TestPuppet" name="test_dog[white]" time="7.062" /></testsuite></testsuites>

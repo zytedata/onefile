@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "onefile"
+version = "0.1.0"
+description = "Merge multiple files into one!"
+authors = ["Andras Santa <andras.santa@zyte.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest = "^8.0.0"
+python-dotenv = "^1.0.1"
+lxml = "^5.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
