@@ -300,3 +300,9 @@ def create_junit_file(test_suite: TestSuite) -> None:
         xml_declaration=True,
         encoding="utf-8",
     )
+
+
+def merge_junit_files(file_paths: list[str]) -> None:
+    test_suites = parse_junit_xml(file_paths)
+    final_test_suite = merge_test_suites(test_suites)
+    create_junit_file(final_test_suite)
