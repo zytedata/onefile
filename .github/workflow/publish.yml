@@ -1,13 +1,17 @@
-name: Upload Python Package
+name: Release
+
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - '*.*.*'
+
 jobs:
-  deploy:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
@@ -26,7 +30,7 @@ jobs:
         run: |
           [[ "$(poetry version --short)" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || echo prerelease=true >> $GITHUB_OUTPUT
 
-      - name: Publish
+      - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
