@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "onefile"
-version = "0.1.0"
+version = "0.1.1"
 description = "Merge multiple files into one!"
 authors = ["Andras Santa <andras.santa@zyte.com>"]
 license = "MIT"
