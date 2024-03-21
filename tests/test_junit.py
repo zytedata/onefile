@@ -53,6 +53,7 @@ class TestMerge(unittest.TestCase):
         files = glob.glob(os.path.join(TEST_DIR, "junit_*.xml"))
         test_suites = parse_junit_xml(files)
         final_test_suite = merge_test_suites(test_suites)
+        print(final_test_suite)
         assert final_test_suite.name == "pytest"
         assert final_test_suite.errors == 1
         assert final_test_suite.failures == 1
@@ -77,6 +78,8 @@ class TestMerge(unittest.TestCase):
                 assert skipped.type == "pytest.xfail"
                 assert skipped.message == "The tiger doesn't want to be a puppet"
                 assert skipped.text is None
+                assert test_case.file == "path/of/test_file.py"
+                assert test_case.line == "234"
             else:
                 assert test_case.error is None
                 assert test_case.failure is None
