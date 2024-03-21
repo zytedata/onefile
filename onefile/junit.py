@@ -44,6 +44,8 @@ class TestCase:
         self,
         classname: str = "",
         name: str = "",
+        file: Optional[str] = None,
+        line: Optional[str] = None,
         time: float = 0.0,
         error: Optional[Error] = None,
         failure: Optional[Failure] = None,
@@ -51,6 +53,8 @@ class TestCase:
     ):
         self.classname = classname
         self.name = name
+        self.file = file
+        self.line = line
         self.time = time
         self.error = error
         self.failure = failure
@@ -59,6 +63,7 @@ class TestCase:
     def __repr__(self):
         return (
             f"TestCase(classname='{self.classname}', name='{self.name}', "
+            f"file='{self.file}', line='{self.line}', "
             f"time='{self.time}', error='{self.error}', failure='{self.failure}', "
             f"skipped='{self.skipped}')"
         )
@@ -134,14 +139,17 @@ def parse_junit_xml(file_paths: list[str]) -> TestSuites:
 
             for test_case_elem in test_suite_elem:
                 error, failure, skipped = None, None, None
+
                 if (error_elem := test_case_elem.find("error")) is not None:
                     error = Error(
                         message=error_elem.get("message", ""), text=error_elem.text
                     )
+
                 if (failure_elem := test_case_elem.find("failure")) is not None:
                     failure = Failure(
                         message=failure_elem.get("message", ""), text=failure_elem.text
                     )
+
                 if (skipped_elem := test_case_elem.find("skipped")) is not None:
                     skipped = Skipped(
                         skip_type=skipped_elem.get("type", ""),
@@ -152,6 +160,8 @@ def parse_junit_xml(file_paths: list[str]) -> TestSuites:
                 test_case = TestCase(
                     classname=test_case_elem.get("classname", ""),
                     name=test_case_elem.get("name", ""),
+                    file=test_case_elem.get("file", None),
+                    line=test_case_elem.get("line", None),
                     time=float(test_case_elem.get("time", 0.0)),
                     error=error,
                     failure=failure,
@@ -265,6 +275,13 @@ def create_junit_file(test_suite: TestSuite) -> None:
         test_case_elem = etree.SubElement(test_suite_elem, "testcase")
         test_case_elem.set("classname", test_case.classname)
         test_case_elem.set("name", test_case.name)
+
+        if test_case.file is not None:
+            test_case_elem.set("file", test_case.file)
+
+        if test_case.line is not None:
+            test_case_elem.set("line", test_case.line)
+
         test_case_elem.set("time", str(test_case.time))
 
         if test_case.error is not None:
