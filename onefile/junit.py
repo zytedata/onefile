@@ -16,7 +16,8 @@ class Message:
 
     def __repr__(self):
         return (
-            f"{self.__class__.__name__}(message='{self.message}', text='{self.text}')"
+            f"{self.__class__.__name__}(message='{self.message}', "
+            f"text='{self.text}')"
         )
 
 
@@ -35,7 +36,8 @@ class Skipped(Message):
 
     def __repr__(self):
         return (
-            f"Skipped(message='{self.message}', type='{self.type}', text='{self.text})"
+            f"Skipped(message='{self.message}', type='{self.type}', "
+            f"text='{self.text})"
         )
 
 
@@ -64,8 +66,8 @@ class TestCase:
         return (
             f"TestCase(classname='{self.classname}', name='{self.name}', "
             f"file='{self.file}', line='{self.line}', "
-            f"time='{self.time}', error='{self.error}', failure='{self.failure}', "
-            f"skipped='{self.skipped}')"
+            f"time='{self.time}', error='{self.error}', "
+            f"failure='{self.failure}', skipped='{self.skipped}')"
         )
 
 
@@ -98,7 +100,8 @@ class TestSuite:
         return (
             f"TestSuite(name='{self.name}', errors={self.errors}, "
             f"failures={self.failures}, skipped={self.skipped}, "
-            f"tests={self.tests}, time={self.time}, timestamp='{self.timestamp}', "
+            f"tests={self.tests}, time={self.time}, "
+            f"timestamp='{self.timestamp}', "
             f"hostname='{self.hostname}', testcases={self.test_cases})"
         )
 
@@ -142,15 +145,21 @@ def parse_junit_xml(file_paths: list[str]) -> TestSuites:
 
                 if (error_elem := test_case_elem.find("error")) is not None:
                     error = Error(
-                        message=error_elem.get("message", ""), text=error_elem.text
+                        message=error_elem.get("message", ""),
+                        text=error_elem.text,
                     )
 
-                if (failure_elem := test_case_elem.find("failure")) is not None:
+                if (
+                    failure_elem := test_case_elem.find("failure")
+                ) is not None:
                     failure = Failure(
-                        message=failure_elem.get("message", ""), text=failure_elem.text
+                        message=failure_elem.get("message", ""),
+                        text=failure_elem.text,
                     )
 
-                if (skipped_elem := test_case_elem.find("skipped")) is not None:
+                if (
+                    skipped_elem := test_case_elem.find("skipped")
+                ) is not None:
                     skipped = Skipped(
                         skip_type=skipped_elem.get("type", ""),
                         message=skipped_elem.get("message", ""),
@@ -207,11 +216,15 @@ def merge_test_suites(test_suites: TestSuites) -> TestSuite:
             )
 
             if existing_tc_index is not None:
-                logging.debug(f"Test case found!")
+                logging.debug("Test case found!")
                 if is_test_suite_timestamp_updated:
                     logging.debug("Test suite timestamp is updated!")
-                    logging.debug("Update final test suite errors, failures, skipped")
-                    existing_tc = final_test_suite.test_cases[existing_tc_index]
+                    logging.debug(
+                        "Update final test suite errors, failures, skipped"
+                    )
+                    existing_tc = final_test_suite.test_cases[
+                        existing_tc_index
+                    ]
 
                     if loaded_testcase.error and not existing_tc.error:
                         logging.debug("Increase errors attribute!")
@@ -241,7 +254,7 @@ def merge_test_suites(test_suites: TestSuites) -> TestSuite:
                 else:
                     logging.debug("Test suite timestamp is NOT updated!")
             else:
-                logging.debug(f"Test case NOT found!")
+                logging.debug("Test case NOT found!")
                 if loaded_testcase.error:
                     final_test_suite.errors += 1
                 if loaded_testcase.failure:
