@@ -161,3 +161,4 @@ cython_debug/
 junit.xml
 .vscode/launch.json
 .vscode/settings.json
+report.html
